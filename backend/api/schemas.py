@@ -1,7 +1,9 @@
 from pydantic import BaseModel, Field
+from uuid import UUID, uuid4
 
 
 class ValidUser(BaseModel):
-    name: str = Field(..., description='user name')
-    password: str = Field(..., description='password')
-    avatar: bytes = Field(..., default=None, description='avatar')
+    id: UUID
+    name: str = Field(description='user name')
+    password: str = Field(description='password')
+    picture: bytes = Field(default=None, description='avatar')
