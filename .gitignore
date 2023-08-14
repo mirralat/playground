@@ -1,1 +1,7 @@
 .idea
+backend/__pycache__
+backend/migrations/__pycache__
+backend/api/__pycache__
+backend/api/logic/__pycache__
+backend/api/router/__pycache__
+backend/postgresql/__pycache__
