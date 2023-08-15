@@ -39,20 +39,22 @@ class UserInteractionsPattern(ABC):
 
 
 class UserInteractions(UserInteractionsPattern):
-    def createUser(self, data=dict) -> bool:
+    def createUser(self, data) -> bool:
         try:
-            new_id = uuid.uuid4()
-            user = ValidUser(id=new_id, name=data['name'], password=data['password'], picture=data['picture'])
+            data = data['user']
+            print(data.id)
+            create = sqlalchemy.insert(UserTab).values(id=str(data.id), name=data.name, password=data.password,
+                                                       picture=data.picture, _User__isAdmin=data._User__isAdmin)
         except pydantic.error_wrappers.ValidationError:
             return False
-        create = sqlalchemy.insert(UserTab).values(id=user.id, name=data['name'], password=data['password'],
-                                                   picture=data['picture'], _User__isAdmin=False)
+
         conn.execute(create)
-        print(conn.execute(sqlalchemy.select(UserTab).where(UserTab.id == new_id)))
+        conn.commit()
+        #   data = conn.execute(sqlalchemy.select(UserTab).where(UserTab.columns.id == new_id))
         return True
 
-    def updateUser(self, user_id, new_fields=dict) -> bool:
-        user_to_update = conn.execute(sqlalchemy.select(User).where(id=user_id))
+    def updateUser(self, user_id, new_fields) -> bool:
+        user_to_update = conn.execute(sqlalchemy.select(UserTab).where(UserTab.columns.id == user_id))
 
         if user_to_update:
             try:
